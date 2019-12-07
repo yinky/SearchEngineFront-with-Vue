@@ -1,44 +1,42 @@
 <template>
   <div>
     <div class="bg">
-      <img class="bg-big-blue-block" src="../assets/background/big-blue-block.svg" />
-      <img class="bg-big-orange-block" src="../assets/background/big-orange-block.svg" />
+      <img class="blue-block block-mobile" src="../assets/background/small-blue-block.svg" />
+      <img class="blue-block block-pc" src="../assets/background/small-blue-block-pc.svg" />
+      <img class="orange-block block-mobile" src="../assets/background/small-orange-block.svg" />
+      <img class="orange-block block-pc" src="../assets/background/small-orange-block-pc.svg" />
     </div>
     <div class="app-content-wrapper">
-      <div class = "decoration-up"></div>
-      <h3 class = "app-text">{{text}}</h3>
-      <div class = "decoration-down"></div>
+    <div class="header">
+      <el-button v-if="!isHome" class="home-buttom" type = "success" size = "mini" icon = "el-icon-back" @click="gotoHome" circle></el-button>
+      <div v-else style="margin-left:10px;"></div>
+      <img class="seu-logo" src="../assets/test.svg" />
+      <div class="title">CSAcademy</div>
+      <div class="space"></div>
+      <img class="logout-button" src="../assets/logout.svg" />
+    </div>
     <div class="app-content">
       <h2 class="app-title">{{title}}</h2>
       <p v-if="desc" class="app-desc">{{desc}}</p>
       <div v-else style="margin-top:20px;"></div>
-      <el-row>
-        <el-input class = "true-input" placeholder="请输入内容" prefix-icon="el-icon-search" v-model="input" clearable></el-input>
-        <el-button class = "true-button" slot="append"  icon="el-icon-search" @click="gotoHome"  ></el-button>
-      </el-row>
+      <div class="panel">
+        <slot></slot>
+      </div>
     </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Button } from "element-ui";
-import {Input} from "element-ui";
+import {Button} from "element-ui"
 export default {
-  name: "Background",
   components: {
-    "el-button": Button,
-    "el-input" : Input
+    "el-button" : Button
   },
-  props: {"title":{type:String, required:true}, "desc":{type:String, default:''}, "text":{type:String, default:''},"isHome":{type:Boolean, default:false}},
+  props: {"title":{type:String, required:true}, "desc":{type:String, default:''}, "isHome":{type:Boolean, default:false}},
   methods: {
     gotoHome(){
       this.$router.replace('/home');
-    },
-    data() {
-      return {
-        input: ''
-      }
     }
   }
 
@@ -47,82 +45,119 @@ export default {
 
 <style lang="less" scoped>
 .bg {
-  z-index: -10;
-  position: fixed;
+  z-index: -100;
   width: 100%;
-  .bg-big-blue-block {
+  top: 0;
+  position: fixed;
+  @media screen and (min-width: 600px) {
+    .block-mobile {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 600px) {
+    .block-pc {
+      display: none;
+    }
+  }
+  .blue-block {
     width: 100%;
     position: fixed;
-    left: 0;
-    animation: blue-move-in 1s;
+    top: 0;
+    z-index: -98;
+    animation: blueSlideIn 1s;
   }
-  .bg-big-orange-block {
+  .orange-block {
     width: 60%;
     position: fixed;
-    bottom: 0;
     right: 0;
-    animation: orange-move-in 2s;
+    top: 160px;
+    z-index: -99;
+    animation: orangeSlideIn 2s;
   }
-  @keyframes blue-move-in {
+
+  @keyframes blueSlideIn {
     from {
-      top: -100px;
+      top: -20px;
     }
     to {
-      top: 0px;
+      top: 0;
     }
   }
-  @keyframes orange-move-in {
+  @keyframes orangeSlideIn {
     from {
-      right: -80px;
+      top: 100px;
     }
     to {
-      right: 0;
+      top: 160px;
     }
   }
 }
 
+.header {
+  position: absolute;
+  top: 5px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  align-items: center;
+  animation: slideIn 1s;
+  width: 100%;
+  max-width: 1000px;
+  .home-buttom {
+    margin-left: 20px;
+  }
+  .seu-logo {
+    width: 50px;
+    margin-left: 7px;
+  }
+  .title {
+    color: #ffb11b;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 7px;
+  }
+  .space {
+    flex-grow: 1;
+  }
+  .logout-button {
+    width: 25px;
+    margin-right: 20px;
+  }
+  @media screen and (min-width: 600px) {
+    .logout-button {
+      margin-right: 40px;
+    }
+    .home-buttom {
+        margin-left: 40px;
+    }
+  }
+  @keyframes slideIn {
+    from {
+      margin-top: -5px;
+    }
+    to {
+      margin-top: 5px;
+    }
+  }
+}
+@media screen and (min-width: 600px) {
+    .header {
+        top: 15px;
+    }
+}
 .app-content-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .decoration-up {
-      animation: line-extract 1s;
-      height: 2px; 
-      font-size:24px; 
-      width: 7em; 
-      background:#fff;
-      margin-top: 200px;
-    }
-    .app-text {
-      color: #ffb11b;
-      margin-top: 20px;
-    }
-    .decoration-down {
-      animation: line-extract 2s;
-      height: 2px; 
-      font-size:24px; 
-      width: 7em; 
-      background:#fff;
-      margin:0 auto;
-    }
-    @keyframes line-extract {
-      from {
-        width: 0;
-      }
-      to {
-        width: 7em;
-      }
-    }
 }
-
 .app-content {
   position: absolute;
   width: 100%;
   max-width: 1000px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  top: 120px;
+  align-items: stretch;
+  top: 50px;
   animation: appContentSlideIn 1s;
   .app-title {
     color: #fff;
@@ -135,13 +170,13 @@ export default {
     margin-left: 20px;
     margin-right: 20px;
   }
-  .true-input {
-    margin-top : 120px;
-    width : 600px;
-  }
-  .true-button {
-    color: #214748;
-    margin: 0px auto;
+  .panel {
+    background: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin: 0 20px;
+    margin-bottom: 30px;
+    padding: 15px 17px;
   }
   @media screen and (min-width: 600px) {
     .panel {
@@ -161,11 +196,11 @@ export default {
 @keyframes appContentSlideIn {
     from {
         opacity: 0;
-        top:90px;
+        top:30px;
     }
     to {
         opacity: 1;
-        top: 120px;
+        top: 50px;
     }
 }
 </style>

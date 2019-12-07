@@ -1,16 +1,14 @@
 <template>
   <div id="app">
-    <Background title = "SEU" desc = "" text = "CSAcademy" isHome = "true"/>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Background from './components/Background.vue'
 
 export default {
   name: 'app',
   components: {
-    Background
   }
 }
 </script>
